@@ -1,0 +1,205 @@
+<Window x:Class="VerzeichnisÜbersicht.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VerzeichnisÜbersicht"
+        mc:Ignorable="d"
+        Title="Verzeichnis Übersicht"
+        Height="550" Width="950"
+        Background="White"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <!-- Header -->
+            <RowDefinition Height="Auto"/>
+            <!-- Content -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="5,5,5,0">
+            <!-- Abstand oben -->
+            <Border Background="#ba1818"
+                Height="75"
+                CornerRadius="15"
+                Padding="15">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black"
+                                  BlurRadius="12"
+                                  ShadowDepth="2"
+                                  Opacity="0.3"/>
+                </Border.Effect>
+
+                <DockPanel LastChildFill="True">
+                    <TextBlock Text="Verzeichnis Überwachung"
+                           Foreground="White"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           DockPanel.Dock="Left"/>
+                    <Image Source="yourLogo"
+                       Height="70"
+                       Stretch="Uniform"
+                       DockPanel.Dock="Right"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Right"    
+                           />
+
+                </DockPanel>
+            </Border>
+        </StackPanel>
+
+        <!-- Content -->
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Toolbar -->
+            <DockPanel Margin="0 0 0 15" LastChildFill="False">
+
+                <!-- Moderne ComboBox mit Text "Sortierung" in Rot -->
+                <ComboBox x:Name="SortierungComboBox"
+          Width="200"
+          Height="36"
+          SelectedIndex="0"
+          VerticalAlignment="Center"
+          Margin="0,0,20,0"
+          Padding="8,0"
+          FontWeight="SemiBold"
+          Foreground="#ba1818"
+          Background="White"
+          BorderBrush="#ba1818"
+          BorderThickness="1" SelectionChanged="SortierungComboBox_SelectionChanged">
+                    <ComboBox.Template>
+                        <ControlTemplate TargetType="ComboBox">
+                            <Grid>
+                                <!-- Border -->
+                                <Border x:Name="Border"
+                        CornerRadius="8"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                                    <DockPanel>
+                                        <!-- Text "Sortierung" -->
+                                        <TextBlock Text="Sortierung:"
+                                   FontWeight="SemiBold"
+                                   Foreground="#ba1818"
+                                   VerticalAlignment="Center"
+                                   Margin="8,0,5,0"/>
+                                        <ContentPresenter x:Name="ContentSite"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          VerticalAlignment="Center"
+                                          Margin="0,0,25,0"/>
+                                        <!-- Pfeil -->
+                                        <ToggleButton x:Name="DropDownToggle"
+                                      IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                      Focusable="False"
+                                      Background="Transparent"
+                                      BorderThickness="0"
+                                      HorizontalAlignment="Right"
+                                      Width="20">
+                                            <Path Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="#ba1818"
+                                  Width="12" Height="6"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"/>
+                                        </ToggleButton>
+                                    </DockPanel>
+                                </Border>
+                                <Popup x:Name="PART_Popup"
+                       Placement="Bottom"
+                       IsOpen="{TemplateBinding IsDropDownOpen}"
+                       AllowsTransparency="True"
+                       Focusable="False"
+                       PopupAnimation="Slide">
+                                    <Border x:Name="DropDownBorder"
+                            CornerRadius="8"
+                            Background="White"
+                            BorderBrush="#ba1818"
+                            BorderThickness="1">
+                                        <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </ControlTemplate>
+                    </ComboBox.Template>
+
+                    <ComboBoxItem Tag="Ascending">Aufsteigend</ComboBoxItem>
+                    <ComboBoxItem Tag="Descending">Absteigend</ComboBoxItem>
+                </ComboBox>
+
+
+                <!-- Löschen Button rechts -->
+                <Button x:Name="DeleteButton"
+                        Content="Löschen"
+                        Width="120" Height="36"
+                        Cursor="Hand"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Right"
+                        Margin="20,0,0,0" Click="DeleteButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="8"
+                                                Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Background" Value="#ba1818"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Padding" Value="5,2"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#a51212"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#7d0e0e"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </DockPanel>
+
+            <!-- DataGrid im Card-Style -->
+            <Border Grid.Row="1"
+                    Background="White"
+                    CornerRadius="12"
+                    BorderThickness="1"
+                    BorderBrush="#ddd"
+                    Padding="5">
+                <Border.Effect>
+                    <DropShadowEffect Color="Black"
+                                      BlurRadius="15"
+                                      ShadowDepth="3"
+                                      Opacity="0.15"/>
+                </Border.Effect>
+                <ListBox x:Name="FilesListBox"
+         Width="Auto"
+         Height="Auto"
+         Margin="0"
+         Background="White"
+         BorderThickness="1"
+         BorderBrush="#ddd"
+         SelectionMode="Extended"
+         HorizontalContentAlignment="Stretch"/>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
